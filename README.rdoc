@@ -1,8 +1,8 @@
-= unicorn_rider
+= alicorn
 
-Description goes here.
+An experimental auto-scaler for Eric Wong's {unicorn}[http://unicorn.bogomips.org] webserver.
 
-== Contributing to unicorn_rider
+== Contributing to alicorn
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
