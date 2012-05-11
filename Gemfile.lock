@@ -21,7 +21,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler
-  jeweler
-  rdoc
-  shoulda
+  bundler (~> 1.1.3)
+  jeweler (~> 1.8.3)
+  rdoc (~> 3.12)
+  shoulda (~> 3.0.1)
