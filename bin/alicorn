@@ -30,6 +30,14 @@ OptionParser.new do |opts|
     options[:downward_step_size] = v
   end
 
+  opts.on("--upward-threshold (0-1)", Float, "the proportion of busy workers to trigger an upscale") do |v|
+    options[:upward_threshold] = v
+  end
+
+  opts.on("--downward-threshold (0-1)", Float, "the proportion of busy workers to trigger a downscale") do |v|
+    options[:downward_threshold] = v
+  end
+
   opts.on("--url S", String, "raindrops URL to check, defaults to 127.0.0.1/_raindrops") do |v|
     options[:url] = v
   end
