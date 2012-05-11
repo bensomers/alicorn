@@ -32,6 +32,7 @@ class Alicorn::Scaler
 
 protected
 
+  # planned algorithm: maintain worker count at 1.3*active
   def upscale
     return false if worker_count >= max_workers
     return false if calling.all? { |sample| sample == 0 }
@@ -62,12 +63,16 @@ private
     p "Collected:"
     p "calling:#{calling}"
     p "calling avg:#{calling.avg}"
+    p "calling stddev:#{calling.stddev}"
     p "writing:#{writing}"
     p "writing avg:#{writing.avg}"
+    p "writing stddev:#{writing.stddev}"
     p "active:#{active}"
     p "active avg:#{active.avg}"
+    p "active stddev:#{active.stddev}"
     p "queued:#{queued}"
     p "queued avg:#{queued.avg}"
+    p "queued stddev:#{queued.stddev}"
   end
 
   def get_raindrops(url)
