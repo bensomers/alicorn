@@ -43,4 +43,4 @@ OptionParser.new do |opts|
   end
 
 end.parse!
-Alicorn.new(options).scale!
+Alicorn::Scaler.new(options).scale!
