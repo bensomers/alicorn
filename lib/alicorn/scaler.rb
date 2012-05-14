@@ -3,8 +3,9 @@ require 'alicorn/dataset'
 
 class Alicorn::Scaler
   attr_accessor :min_workers, :max_workers, :upward_step_size, 
-    :downward_step_size, :raindrops_url, :delay, :sample_count, :app_name,
-    :master_pid, :worker_count, :calling, :writing, :active, :queued
+    :downward_step_size, :upward_threshold, :downward_threshold, :raindrops_url, 
+    :delay, :sample_count, :app_name, :master_pid, :worker_count, :calling, 
+    :writing, :active, :queued
 
   def initialize(options)
     self.min_workers        = options[:min_workers]         || 1
@@ -34,12 +35,12 @@ protected
 
   # planned algorithm: maintain worker count at 1.3*active
   def upscale
-    return false if worker_count >= max_workers
-    return false if calling.all? { |sample| sample == 0 }
+    # return false if worker_count >= max_workers
+    # return false if calling.all? { |sample| sample == 0 }
   end
 
   def downscale
-    return false if worker_count <= min_workers
+    # return false if worker_count <= min_workers
   end
 
 private
