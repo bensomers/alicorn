@@ -1,5 +1,3 @@
-require 'csv'
-
 class AlicornLogParser
   attr_accessor :filename, :samples, :calling, :active, :queued, :calling_avg, :active_avg, :queued_avg
 

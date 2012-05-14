@@ -12,7 +12,8 @@ require 'shoulda'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'unicorn_rider'
+require 'alicorn'
+require 'script/al'
 
 class Test::Unit::TestCase
 end
