@@ -34,6 +34,3 @@ class AlicornLogParser
     end
   end
 end
-
-@alp = AlicornLogParser.new
-@alp.parse
