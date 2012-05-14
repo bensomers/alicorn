@@ -2,57 +2,55 @@ require 'curl'
 require 'alicorn/dataset'
 
 class Alicorn::Scaler
-  attr_accessor :min_workers, :max_workers, :upward_step_size, 
-    :downward_step_size, :upward_threshold, :downward_threshold, :raindrops_url, 
-    :delay, :sample_count, :app_name, :master_pid, :worker_count, :calling, 
-    :writing, :active, :queued
+  attr_accessor :min_workers, :max_workers, :target_ratio, :buffer,
+    :raindrops_url, :delay, :sample_count, :app_name, :master_pid,
+    :worker_count
 
   def initialize(options)
     self.min_workers        = options[:min_workers]         || 1
     self.max_workers        = options[:max_workers]
-    self.upward_threshold   = options[:upward_threshold]
-    self.downward_threshold = options[:downward_threshold]
-    self.upward_step_size   = options[:upward_step_size]    || 1
-    self.downward_step_size = options[:downward_step_size]  || 1
+    self.target_ratio       = options[:target_ratio]        || 1.3
+    self.buffer             = options[:buffer]              || 0
     self.raindrops_url      = options[:url]                 || "http://127.0.0.1/_raindrops"
     self.delay              = options[:delay]               || 1
     self.sample_count       = options[:sample_count]        || 30
     self.app_name           = options[:app_name]            || "unicorn"
-    self.master_pid         = find_master_pid(app_name)
-    self.worker_count       = find_worker_count(app_name)
-    self.calling            = DataSet.new
-    self.writing            = DataSet.new
-    self.active             = DataSet.new
-    self.queued             = DataSet.new
   end
 
   def scale!
-    collect_data
-    upscale or downscale
-  end
+    master_pid    = find_master_pid
+    worker_count  = find_worker_count
+    data          = collect_data
 
-protected
+    # Calcualte target
+    target = data[:active].max * target_ratio - buffer
 
-  # planned algorithm: maintain worker count at 1.3*active
-  def upscale
-    # return false if worker_count >= max_workers
-    # return false if calling.all? { |sample| sample == 0 }
-  end
+    # Check hard thresholds
+    target = max_workers if max_workers and worker_count > max_workers
+    target = min_workers if worker_count < min_workers
 
-  def downscale
-    # return false if worker_count <= min_workers
+    p "target calculated at: #{target}"
+    if target > worker_count
+      p "scaling up!"
+      send_signal("TTIN")
+    elsif target <= worker_count
+      p "scaling down!"
+      send_signal("TTOU")
+    end
   end
 
 private
 
-  def find_master_pid(app_name)
+  def find_master_pid
   end
 
-  def find_worker_count(app_name)
+  def find_worker_count
+    14
   end
 
   def collect_data
     p "Sampling #{sample_count} times"
+    calling, writing, active, queued = DataSet.new, DataSet.new, DataSet.new, DataSet.new
     sample_count.times do
       raindrops = get_raindrops(raindrops_url)
       calling << $1.to_i if raindrops.detect { |line| line.match(/calling: ([0-9]+)/) }
@@ -74,6 +72,7 @@ private
     p "queued:#{queued}"
     p "queued avg:#{queued.avg}"
     p "queued stddev:#{queued.stddev}"
+    {:calling => calling, :writing => writing, :active => active, :queued => queued}
   end
 
   def get_raindrops(url)
@@ -81,6 +80,7 @@ private
   end
   
   def send_signal(sig)
-    Process.kill(sig, master_pid)
+    return sig
+    # Process.kill(sig, master_pid)
   end
 end

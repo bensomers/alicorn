@@ -22,20 +22,12 @@ OptionParser.new do |opts|
     options[:max_workers] = v
   end
 
-  opts.on("--upward-step-size N", Integer, "the number of workers to add when scaling up") do |v|
-    options[:upward_step_size] = v
+  opts.on("--buffer N", Integer, "the number of extra workers to keep for safety's sake") do |v|
+    options[:buffer] = v
   end
 
-  opts.on("--downward-step-size N", Integer, "the number of workers to remove when scaling down") do |v|
-    options[:downward_step_size] = v
-  end
-
-  opts.on("--upward-threshold (0-1)", Float, "the proportion of busy workers to trigger an upscale") do |v|
-    options[:upward_threshold] = v
-  end
-
-  opts.on("--downward-threshold (0-1)", Float, "the proportion of busy workers to trigger a downscale") do |v|
-    options[:downward_threshold] = v
+  opts.on("--target-ratio", Float, "the desired ratio of workers to busy workers") do |v|
+    options[:target_ratio] = v
   end
 
   opts.on("--url S", String, "raindrops URL to check, defaults to 127.0.0.1/_raindrops") do |v|
