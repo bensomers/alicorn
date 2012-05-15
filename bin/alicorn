@@ -14,15 +14,15 @@ OptionParser.new do |opts|
       exit
     end
 
-  opts.on("--min-workers N", Integer, "the minimum number of workers to scale down to") do |v|
+  opts.on("--min-workers", Integer, "the minimum number of workers to scale down to") do |v|
     options[:min_workers] = v
   end
 
-  opts.on("--max-workers N", Integer, "the maximum number of workers to scale up to") do |v|
+  opts.on("--max-workers", Integer, "the maximum number of workers to scale up to") do |v|
     options[:max_workers] = v
   end
 
-  opts.on("--buffer N", Integer, "the number of extra workers to keep for safety's sake") do |v|
+  opts.on("--buffer", Integer, "the number of extra workers to keep for safety's sake") do |v|
     options[:buffer] = v
   end
 
@@ -30,11 +30,11 @@ OptionParser.new do |opts|
     options[:target_ratio] = v
   end
 
-  opts.on("--url S", String, "raindrops URL to check, defaults to 127.0.0.1/_raindrops") do |v|
+  opts.on("--url", String, "raindrops URL to check, defaults to 127.0.0.1/_raindrops") do |v|
     options[:url] = v
   end
 
-  opts.on("--sample-count N", Integer, "number of data points to check before scaling") do |v|
+  opts.on("--sample-count", Integer, "number of data points to check before scaling") do |v|
     options[:sample_count] = v
   end
 
