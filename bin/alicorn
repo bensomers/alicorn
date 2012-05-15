@@ -42,5 +42,13 @@ OptionParser.new do |opts|
     options[:delay] = v
   end
 
+  opts.on("--log-path", String, "path to write log file - leave blank for no logging") do |v|
+    options[:log_path] = v
+  end
+
+  opts.on("--debug true|false", String, "turn on for profiling info") do |v|
+    options[:debug] = v
+  end
+
 end.parse!
 Alicorn::Scaler.new(options).scale!

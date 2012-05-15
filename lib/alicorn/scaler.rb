@@ -1,10 +1,11 @@
 require 'curl'
+require 'logger'
 require 'alicorn/dataset'
 
 class Alicorn::Scaler
   attr_accessor :min_workers, :max_workers, :target_ratio, :buffer,
     :raindrops_url, :delay, :sample_count, :app_name, :master_pid,
-    :worker_count
+    :worker_count, :logger
 
   def initialize(options)
     self.min_workers        = options[:min_workers]         || 1
@@ -15,6 +16,10 @@ class Alicorn::Scaler
     self.delay              = options[:delay]               || 1
     self.sample_count       = options[:sample_count]        || 30
     self.app_name           = options[:app_name]            || "unicorn"
+    log_path                = options[:log_path]            || "/dev/null"
+
+    self.logger = Logger.new(log_path)
+    logger.level = options[:debug] ? Logger::DEBUG : Logger::WARN
   end
 
   def scale!
@@ -22,24 +27,30 @@ class Alicorn::Scaler
     worker_count  = find_worker_count
     data          = collect_data
 
-    # Calcualte target
-    target = data[:active].max * target_ratio - buffer
-
-    # Check hard thresholds
-    target = max_workers if max_workers and worker_count > max_workers
-    target = min_workers if worker_count < min_workers
-
-    p "target calculated at: #{target}"
-    if target > worker_count
-      p "scaling up!"
-      send_signal("TTIN")
-    elsif target <= worker_count
-      p "scaling down!"
-      send_signal("TTOU")
-    end
+    sig = choose_signal(data, worker_count)
+    send_signal(sig) if sig
   end
 
-private
+protected
+
+  def auto_scale(data, worker_count)
+    # Calculate target
+    target = data[:active].max * target_ratio + buffer
+
+    # Check hard thresholds
+    target = max_workers if max_workers and target > max_workers
+    target = min_workers if target < min_workers
+    target = target.round
+
+    logger.debug "target calculated at: #{target}, worker count at #{worker_count}"
+    if target > worker_count
+      logger.debug "scaling up!"
+      return "TTIN"
+    elsif target.floor < worker_count
+      logger.debug "scaling down!"
+      return "TTOU"
+    end
+  end
 
   def find_master_pid
   end
@@ -48,8 +59,10 @@ private
     14
   end
 
+private
+
   def collect_data
-    p "Sampling #{sample_count} times"
+    logger.debug "Sampling #{sample_count} times"
     calling, writing, active, queued = DataSet.new, DataSet.new, DataSet.new, DataSet.new
     sample_count.times do
       raindrops = get_raindrops(raindrops_url)
@@ -59,19 +72,19 @@ private
       queued  << $1.to_i if raindrops.detect { |line| line.match(/queued: ([0-9]+)/) }
       sleep(delay)
     end
-    p "Collected:"
-    p "calling:#{calling}"
-    p "calling avg:#{calling.avg}"
-    p "calling stddev:#{calling.stddev}"
-    p "writing:#{writing}"
-    p "writing avg:#{writing.avg}"
-    p "writing stddev:#{writing.stddev}"
-    p "active:#{active}"
-    p "active avg:#{active.avg}"
-    p "active stddev:#{active.stddev}"
-    p "queued:#{queued}"
-    p "queued avg:#{queued.avg}"
-    p "queued stddev:#{queued.stddev}"
+    logger.debug "Collected:"
+    logger.debug "calling:#{calling}"
+    logger.debug "calling avg:#{calling.avg}"
+    logger.debug "calling stddev:#{calling.stddev}"
+    logger.debug "writing:#{writing}"
+    logger.debug "writing avg:#{writing.avg}"
+    logger.debug "writing stddev:#{writing.stddev}"
+    logger.debug "active:#{active}"
+    logger.debug "active avg:#{active.avg}"
+    logger.debug "active stddev:#{active.stddev}"
+    logger.debug "queued:#{queued}"
+    logger.debug "queued avg:#{queued.avg}"
+    logger.debug "queued stddev:#{queued.stddev}"
     {:calling => calling, :writing => writing, :active => active, :queued => queued}
   end
 
