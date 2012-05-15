@@ -6,48 +6,52 @@ require 'alicorn'
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Alicorn is a tool for auto-scaling unicorn worker counts.
-    It relies on unicorn's built-in Raindrops middleware (so make sure you have
-    enabled it). It computes rough load scores based on separately averaged
-    data sets. , \n\nUsage: alicorn [options]"
+It relies on unicorn's built-in Raindrops middleware (so make sure you have
+enabled it). It computes rough load scores based on separately averaged
+data sets. \n\nUsage: alicorn [options]"
     opts.on( '-h', '--help', 'Display this screen' ) do
       puts opts
       exit
     end
 
-  opts.on("--min-workers", Integer, "the minimum number of workers to scale down to") do |v|
+  opts.on("--min-workers [N]", Integer, "the minimum number of workers to scale down to") do |v|
     options[:min_workers] = v
   end
 
-  opts.on("--max-workers", Integer, "the maximum number of workers to scale up to") do |v|
+  opts.on("--max-workers [N]", Integer, "the maximum number of workers to scale up to") do |v|
     options[:max_workers] = v
   end
 
-  opts.on("--buffer", Integer, "the number of extra workers to keep for safety's sake") do |v|
+  opts.on("--buffer [N]", Integer, "the number of extra workers to keep for safety's sake") do |v|
     options[:buffer] = v
   end
 
-  opts.on("--target-ratio", Float, "the desired ratio of workers to busy workers") do |v|
+  opts.on("--target-ratio [F]", Float, "the desired ratio of workers to busy workers") do |v|
     options[:target_ratio] = v
   end
 
-  opts.on("--url", String, "raindrops URL to check, defaults to 127.0.0.1/_raindrops") do |v|
+  opts.on("--url [URL]", String, "raindrops URL to check, defaults to 127.0.0.1/_raindrops") do |v|
     options[:url] = v
   end
 
-  opts.on("--sample-count", Integer, "number of data points to check before scaling") do |v|
+  opts.on("--sample-count [N]", Integer, "number of data points to check before scaling") do |v|
     options[:sample_count] = v
   end
 
-  opts.on("--delay (seconds)", Float, "delay between checks") do |v|
+  opts.on("--delay [F]", Float, "delay between checks") do |v|
     options[:delay] = v
   end
 
-  opts.on("--log-path", String, "path to write log file - leave blank for no logging") do |v|
+  opts.on("--log-path [PATH]", String, "path to write log file - leave blank for no logging") do |v|
     options[:log_path] = v
   end
 
-  opts.on("--debug true|false", String, "turn on for profiling info") do |v|
-    options[:debug] = v
+  opts.on("-v", "--[no-]verbose", "turn on to write profiling info") do
+    options[:verbose] = true
+  end
+
+  opts.on("-d", "--[no-]dry-run", "turn on to disable actual scaling") do
+    options[:dry_run] = true
   end
 
 end.parse!
