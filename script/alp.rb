@@ -9,11 +9,11 @@ class AlicornLogParser
   def parse
     f = File.open(filename)
     f.each do |line|
-      next if line.match(/^"(Sampling|Collected|writing)/) # discard non-data lines and useless writing count
-      if line.match(/^"calling:\[(.+)\]"/)
+      if line.match(/^"Sampling/)
+        @sample_hash = {} # this will reset every sample
+      elsif line.match(/^"calling:\[(.+)\]"/)
         data = $1.split(", ").map(&:to_i)
         calling << data
-        @sample_hash = {} # this will reset every four iterations
         @sample_hash[:calling] = data
       elsif line.match(/^"calling avg:([\d]+)"/)
         data = $1.to_i
