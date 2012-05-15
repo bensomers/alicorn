@@ -9,12 +9,12 @@ require 'alicorn/log_parser'
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Alicorn Profiler is a profiling tool to use for determining
-    optimal settings to run alicorn at. First, run the scaler in dry-run mode
-    to collect statistics about your application load. Then pull that log file
-    and feed it into this profiler. Experiment with the options until you find
-    settings that work well for you. Be aware that occasional 'Overloaded!' 
-    situations are not necessarily bad; they just result in requests getting 
-    queued. \n\nUsage: alicorn [options]"
+optimal settings to run alicorn at. First, run the scaler in dry-run mode
+to collect statistics about your application load. Then pull that log file
+and feed it into this profiler. Experiment with the options until you find
+settings that work well for you. Be aware that occasional 'Overloaded!' 
+situations are not necessarily bad; they just result in requests getting 
+queued. \n\nUsage: alicorn [options]"
     opts.on( '-h', '--help', 'Display this screen' ) do
       puts opts
       exit
