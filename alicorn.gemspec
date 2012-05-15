@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.date = "2012-05-15"
   s.description = "Highly configurable dumb auto-scaler for managing unicorn web servers"
   s.email = "somers.ben@gmail.com"
-  s.executables = ["alicorn", "alicorn_profiler.rb"]
+  s.executables = ["alicorn", "alicorn_profiler"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.rdoc"
@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
     "VERSION",
     "alicorn.gemspec",
     "bin/alicorn",
+    "bin/alicorn_profiler",
     "lib/alicorn.rb",
     "lib/alicorn/dataset.rb",
     "lib/alicorn/log_parser.rb",
