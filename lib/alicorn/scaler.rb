@@ -36,6 +36,7 @@ module Alicorn
   protected
 
     def auto_scale(data, worker_count)
+      return nil if data[:active].empty?
       # Calculate target
       target = data[:active].max * target_ratio + buffer
 
