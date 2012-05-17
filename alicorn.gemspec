@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "alicorn"
-  s.version = "0.0.5"
+  s.version = "0.0.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ben Somers"]
-  s.date = "2012-05-15"
+  s.date = "2012-05-16"
   s.description = "Highly configurable dumb auto-scaler for managing unicorn web servers"
   s.email = "somers.ben@gmail.com"
   s.executables = ["alicorn", "alicorn_profiler"]
