@@ -2,6 +2,8 @@
 
 An experimental auto-scaler for Eric Wong's {unicorn}[http://unicorn.bogomips.org] webserver.
 
+http://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/British_Airborne_Units.gif/602px-British_Airborne_Units.gif
+
 == Contributing to alicorn
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
