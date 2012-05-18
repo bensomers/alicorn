@@ -100,6 +100,7 @@ module Alicorn
         queued  << $1.to_i if raindrops.detect { |line| line.match(/queued: ([0-9]+)/) }
         sleep(delay)
       end
+
       logger.debug "Collected:"
       logger.debug "calling:#{calling}"
       logger.debug "calling avg:#{calling.avg}"
@@ -113,6 +114,7 @@ module Alicorn
       logger.debug "queued:#{queued}"
       logger.debug "queued avg:#{queued.avg}"
       logger.debug "queued stddev:#{queued.stddev}"
+
       {:calling => calling, :writing => writing, :active => active, :queued => queued}
     end
 
