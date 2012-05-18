@@ -5,14 +5,13 @@ require 'alicorn/dataset'
 module Alicorn
   class Scaler
     attr_accessor :min_workers, :max_workers, :target_ratio, :buffer,
-      :raindrops_url, :delay, :sample_count, :app_name, :dry_run,
-      :master_pid, :worker_count, :logger
+      :raindrops_url, :delay, :sample_count, :app_name, :dry_run, :logger
 
-    def initialize(options)
+    def initialize(options = {})
       self.min_workers        = options[:min_workers]         || 1
       self.max_workers        = options[:max_workers]
       self.target_ratio       = options[:target_ratio]        || 1.3
-      self.buffer             = options[:buffer]              || 0
+      self.buffer             = options[:buffer]              || 2
       self.raindrops_url      = options[:url]                 || "http://127.0.0.1/_raindrops"
       self.delay              = options[:delay]               || 1
       self.sample_count       = options[:sample_count]        || 30
@@ -25,18 +24,25 @@ module Alicorn
     end
 
     def scale!
-      master_pid    = find_master_pid
-      worker_count  = find_worker_count
       data          = collect_data
+      unicorns      = find_unicorns
+      master_pid    = find_master_pid(unicorns)
+      worker_count  = find_worker_count(unicorns)
 
-      sig = auto_scale(data, worker_count)
-      send_signal(sig) if sig
+      sig, number = auto_scale(data, worker_count)
+      if sig and !dry_run
+        number.times do
+          send_signal(master_pid, sig) 
+          sleep(1) # Make sure unicorn doesn't discard repeated signals
+        end
+      end
     end
 
   protected
 
     def auto_scale(data, worker_count)
       return nil if data[:active].empty?
+
       # Calculate target
       target = data[:active].max * target_ratio + buffer
 
@@ -46,23 +52,42 @@ module Alicorn
       target = target.ceil
 
       logger.debug "target calculated at: #{target}, worker count at #{worker_count}"
-      if target > worker_count
-        logger.debug "scaling up!" unless dry_run
-        return "TTIN"
+      if data[:active].avg > worker_count
+        logger.debug "danger, will robinson! scaling up fast!"
+        return "TTIN", target - worker_count
+      elsif target > worker_count
+        logger.debug "scaling up!"
+        return "TTIN", 1
       elsif target < worker_count
-        logger.debug "scaling down!" unless dry_run
-        return "TTOU"
+        logger.debug "scaling down!"
+        return "TTOU", 1
+      elsif target == worker_count
+        logger.debug "just right!"
+        return nil, 0
       end
     end
 
-    def find_master_pid
+    def find_master_pid(unicorns)
+      master_lines = unicorns.select { |line| line.match /master/ }
+      if master_lines.size > 1
+        abort "Too many unicorn master processes detected. You may be restarting, or have an app name collision: #{master_lines}"
+      elsif master_lines.first.match /\(old\)/
+        abort "Old master process detected. You may be restarting: #{master_lines.first}"
+      else
+        master_lines.first.split.first
+      end
     end
 
-    def find_worker_count
-      14
+    def find_worker_count(unicorns)
+      unicorns.select { |line| line.match /worker\[[\d]\]/ }.count
     end
 
-  private
+    def find_unicorns
+      ptable = %x(ps ax).split("\n")
+      unicorns = ptable.select { |line| line.match(/unicorn/) && line.match(/#{Regexp.escape(app_name)}/) }
+      unicorns.map(&:strip)
+    end
+
 
     def collect_data
       logger.debug "Sampling #{sample_count} times"
@@ -91,14 +116,15 @@ module Alicorn
       {:calling => calling, :writing => writing, :active => active, :queued => queued}
     end
 
+    def send_signal(master_pid, sig)
+      Process.kill(sig, master_pid)
+    end
+
+private
+
     def get_raindrops(url)
       Curl::Easy.http_get(url).body_str.split("\n")
     end
     
-    def send_signal(sig)
-      return false if dry_run
-      return sig
-      # Process.kill(sig, master_pid)
-    end
   end
 end
