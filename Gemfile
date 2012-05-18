@@ -7,4 +7,5 @@ group :development do
   gem "rdoc", "~> 3.12"
   gem "bundler", "~> 1.1.3"
   gem "jeweler", "~> 1.8.3"
+  gem "mocha", "~> 0.11.4"
 end
