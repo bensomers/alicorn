@@ -63,7 +63,7 @@ p "Testing #{@alp.samples.count} samples"
 @alp.samples.each do |sample|
   if sample[:active].max > @worker_count
     p "Overloaded! Ran #{@worker_count} and got #{sample[:active].max} active"
-    p sample
+    p sample[:active]
   end
   sig, count = scaler.send(:auto_scale, sample, @worker_count)
   @worker_count += count if sig == "TTIN"
