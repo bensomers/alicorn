@@ -52,7 +52,7 @@ module Alicorn
       target = target.ceil
 
       logger.debug "target calculated at: #{target}, worker count at #{worker_count}"
-      if data[:active].avg > worker_count
+      if data[:active].avg > worker_count and data[:queued].avg > 1
         logger.debug "danger, will robinson! scaling up fast!"
         return "TTIN", target - worker_count
       elsif target > worker_count

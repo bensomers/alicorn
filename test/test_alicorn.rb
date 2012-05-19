@@ -19,7 +19,9 @@ class TestScaler < Test::Unit::TestCase
       @scaler.max_workers = 25
       @scaler.buffer = 2
       @scaler.target_ratio = 1.3
-      @data = { :active => DataSet.new }
+      @data = { :active => DataSet.new,
+                :queued => DataSet.new }
+      @data[:queued] << 0
     end
 
     context "when we're above the target" do
@@ -44,6 +46,7 @@ class TestScaler < Test::Unit::TestCase
 
     context "when we need to scale up fast" do
       setup do
+        @data[:queued] << 12
         @data[:active] << 12
       end
 
