@@ -14,7 +14,12 @@ to collect statistics about your application load. Then pull that log file
 and feed it into this profiler. Experiment with the options until you find
 settings that work well for you. Be aware that occasional 'Overloaded!' 
 situations are not necessarily bad; they just result in requests getting 
-queued. \n\nUsage: alicorn [options]"
+queued. Note that this profiler is inaccurate in two situations. First, it
+cannot reliably detect a restart (which will reset the worker count, typically
+to max). Second, if the production system is currently running with alicorn in
+dry-run mode, it will not be producing accurate queued counts, which alicorn
+uses to trigger panic responses (which produce fast scale-ups).
+\n\nUsage: alicorn [options]"
     opts.on( '-h', '--help', 'Display this screen' ) do
       puts opts
       exit
@@ -34,6 +39,10 @@ queued. \n\nUsage: alicorn [options]"
 
   opts.on("--target-ratio F", Float, "the desired ratio of workers to busy workers") do |v|
     options[:target_ratio] = v
+  end
+
+  opts.on("-v", "--[no-]verbose", "turn on to write full sample data on overloads") do
+    options[:verbose] = true
   end
 
   opts.on("--log-path PATH", String, "location of the alicorn log file to read") do |v|
@@ -63,7 +72,7 @@ p "Testing #{@alp.samples.count} samples"
 @alp.samples.each do |sample|
   if sample[:active].max > @worker_count
     p "Overloaded! Ran #{@worker_count} and got #{sample[:active].max} active"
-    p sample[:active]
+    p sample if options[:verbose]
   end
   sig, count = scaler.send(:auto_scale, sample, @worker_count)
   @worker_count += count if sig == "TTIN"
