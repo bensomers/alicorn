@@ -15,9 +15,15 @@ module Alicorn
         elsif line.match(/calling:\[(.+)\]/)
           data = $1.split(", ").map(&:to_i)
           @sample_hash[:calling] = (DataSet.new << data).flatten
+        elsif line.match(/writing:\[(.+)\]/)
+          data = $1.split(", ").map(&:to_i)
+          @sample_hash[:writing] = (DataSet.new << data).flatten
         elsif line.match(/active:\[(.+)\]/)
           data = $1.split(", ").map(&:to_i)
           @sample_hash[:active] = (DataSet.new << data).flatten
+        elsif line.match(/queued:\[(.+)\]/)
+          data = $1.split(", ").map(&:to_i)
+          @sample_hash[:queued] = (DataSet.new << data).flatten
           samples << @sample_hash # store the old sample
         end
       end
