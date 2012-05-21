@@ -1,6 +1,6 @@
 class DataSet < Array
   def avg
-    return nil if empty?
+    return 0 if empty?
     inject(:+) / size.to_i
   end
 
