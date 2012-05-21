@@ -8,8 +8,6 @@ module Alicorn
       :raindrops_url, :delay, :sample_count, :app_name, :dry_run, :logger
 
     def initialize(options = {})
-      raise ArgumentError.new("You must pass a :max_workers option") unless options[:max_workers]
-
       self.min_workers        = options[:min_workers]         || 1
       self.max_workers        = options[:max_workers]
       self.target_ratio       = options[:target_ratio]        || 1.3
@@ -28,6 +26,8 @@ module Alicorn
     def scale!
       data          = collect_data
       unicorns      = find_unicorns
+
+      abort "Could not find any unicorn processes" if unicorns.empty?
       master_pid    = find_master_pid(unicorns)
       worker_count  = find_worker_count(unicorns)
 
