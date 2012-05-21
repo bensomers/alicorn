@@ -43,10 +43,12 @@ module Alicorn
   protected
 
     def auto_scale(data, worker_count)
-      return nil if data[:active].empty?
+      return nil if data[:active].empty? or data[:queued].empty?
+      connections = data[:active].zip(data[:queued]).map { |e| e.inject(:+) }
+      connections = DataSet.new(connections)
 
       # Calculate target
-      target = data[:active].max * target_ratio + buffer
+      target = connections.max * target_ratio + buffer
 
       # Check hard thresholds
       target = max_workers if max_workers and target > max_workers
@@ -54,7 +56,7 @@ module Alicorn
       target = target.ceil
 
       logger.debug "target calculated at: #{target}, worker count at #{worker_count}"
-      if data[:active].avg > worker_count and data[:queued].avg > 1
+      if connections.avg > worker_count and data[:queued].avg > 1
         logger.debug "danger, will robinson! scaling up fast!"
         return "TTIN", target - worker_count
       elsif target > worker_count
@@ -89,7 +91,6 @@ module Alicorn
       unicorns = ptable.select { |line| line.match(/unicorn/) && line.match(/#{Regexp.escape(app_name)}/) }
       unicorns.map(&:strip)
     end
-
 
     def collect_data
       logger.debug "Sampling #{sample_count} times"

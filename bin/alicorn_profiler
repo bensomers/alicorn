@@ -70,8 +70,9 @@ scaler = Alicorn::Scaler.new(@options)
 
 p "Testing #{@alp.samples.count} samples"
 @alp.samples.each do |sample|
-  if sample[:active].max > @worker_count
-    p "Overloaded! Ran #{@worker_count} and got #{sample[:active].max} active"
+  connections = sample[:active].zip(sample[:queued]).map { |e| e.inject(:+) }
+  if connections.max > @worker_count
+    p "Overloaded! Ran #{@worker_count} and got #{connections.max} active + queued"
     p sample if options[:verbose]
   end
   sig, count = scaler.send(:auto_scale, sample, @worker_count)

@@ -21,12 +21,13 @@ class TestScaler < Test::Unit::TestCase
       @scaler.target_ratio = 1.3
       @data = { :active => DataSet.new,
                 :queued => DataSet.new }
-      @data[:queued] << 0
+      @data[:queued]
     end
 
     context "when we're above the target" do
       setup do
         @data[:active] << 3 << 4 << 5
+        @data[:queued] << 0 << 0 << 0
       end
 
       should "return 1 TTOU" do
@@ -37,6 +38,7 @@ class TestScaler < Test::Unit::TestCase
     context "when we're below the target" do
       setup do
         @data[:active] << 2 << 10
+        @data[:queued] << 0 << 0
       end
 
       should "return 1 TTIN" do
@@ -46,8 +48,8 @@ class TestScaler < Test::Unit::TestCase
 
     context "when we need to scale up fast" do
       setup do
-        @data[:queued] << 12
-        @data[:active] << 12
+        @data[:queued] << 6
+        @data[:active] << 6
       end
 
       should "return several TTIN" do
@@ -58,6 +60,7 @@ class TestScaler < Test::Unit::TestCase
     context "when we don't need to scale at all" do
       setup do
         @data[:active] << 6
+        @data[:queued] << 0
       end
 
       should "return several TTIN" do
