@@ -8,6 +8,8 @@ module Alicorn
       :raindrops_url, :delay, :sample_count, :app_name, :dry_run, :logger
 
     def initialize(options = {})
+      raise ArgumentError.new("You must pass a :max_workers option") unless options[:max_workers]
+
       self.min_workers        = options[:min_workers]         || 1
       self.max_workers        = options[:max_workers]
       self.target_ratio       = options[:target_ratio]        || 1.3

@@ -18,7 +18,7 @@ data sets. \n\nUsage: alicorn [options]"
     options[:min_workers] = v
   end
 
-  opts.on("--max-workers [N]", Integer, "the maximum number of workers to scale up to") do |v|
+  opts.on("--max-workers N", Integer, "the maximum number of workers to scale up to") do |v|
     options[:max_workers] = v
   end
 
@@ -55,4 +55,6 @@ data sets. \n\nUsage: alicorn [options]"
   end
 
 end.parse!
+raise OptionParser::MissingArgument.new("--max-workers is a mandatory argument") unless options[:max_workers]
+
 Alicorn::Scaler.new(options).scale!
