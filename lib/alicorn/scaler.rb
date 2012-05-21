@@ -105,17 +105,9 @@ module Alicorn
 
       logger.debug "Collected:"
       logger.debug "calling:#{calling}"
-      logger.debug "calling avg:#{calling.avg}"
-      logger.debug "calling stddev:#{calling.stddev}"
       logger.debug "writing:#{writing}"
-      logger.debug "writing avg:#{writing.avg}"
-      logger.debug "writing stddev:#{writing.stddev}"
       logger.debug "active:#{active}"
-      logger.debug "active avg:#{active.avg}"
-      logger.debug "active stddev:#{active.stddev}"
       logger.debug "queued:#{queued}"
-      logger.debug "queued avg:#{queued.avg}"
-      logger.debug "queued stddev:#{queued.stddev}"
 
       {:calling => calling, :writing => writing, :active => active, :queued => queued}
     end
