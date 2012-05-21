@@ -76,7 +76,7 @@ module Alicorn
       elsif master_lines.first.match /\(old\)/
         abort "Old master process detected. You may be restarting: #{master_lines.first}"
       else
-        master_lines.first.split.first
+        master_lines.first.split.first.to_i
       end
     end
 
