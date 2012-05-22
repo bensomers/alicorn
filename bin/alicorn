@@ -67,4 +67,4 @@ data sets. \n\nUsage: alicorn [options]"
 end.parse!
 raise OptionParser::MissingArgument.new("--max-workers is a mandatory argument") unless options[:max_workers]
 
-Alicorn::Scaler.new(options).scale!
+Alicorn::Scaler.new(options).scale
