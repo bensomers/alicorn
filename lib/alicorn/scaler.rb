@@ -83,7 +83,7 @@ module Alicorn
     end
 
     def find_worker_count(unicorns)
-      unicorns.select { |line| line.match /worker\[[\d]\]/ }.count
+      unicorns.select { |line| line.match /worker\[[\d+]\]/ }.count
     end
 
     def find_unicorns
