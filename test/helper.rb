@@ -1,3 +1,8 @@
+unless RUBY_VERSION.match(/1\.8/)
+  require 'simplecov'
+  SimpleCov.start
+end
+
 require 'rubygems'
 require 'bundler'
 begin
