@@ -3,7 +3,7 @@ $:.push File.join(File.dirname(__FILE__),'..','lib')
 
 require 'optparse'
 require 'alicorn'
-require 'alicorn/log_parser'
+require 'alicorn/profiler'
 
 
 options = {}
@@ -50,32 +50,7 @@ uses to trigger panic responses (which produce fast scale-ups).
   end
 end.parse!
 
-# Use these two variables to control the profiler
-# The log file is the output of the sampling-mode alicorn
-# The options are a stripped-down option set, including only
-# the options that matter to the scaling algorithm.
-@log_file = options[:log_path]
-@options = { :min_workers => options[:min_workers],
-             :max_workers => options[:max_workers],
-             :target_ratio => options[:target_ration],
-             :buffer => options[:buffer],
-             :debug => true,
-             :dry_run => true}
+options.merge!(:debug => true, :dry_run => true)
 
-@alp = Alicorn::LogParser.new(@log_file)
-@alp.parse
-
-scaler = Alicorn::Scaler.new(@options)
-@worker_count = @options[:max_workers]
-
-p "Testing #{@alp.samples.count} samples"
-@alp.samples.each do |sample|
-  connections = sample[:active].zip(sample[:queued]).map { |e| e.inject(:+) }
-  if connections.max > @worker_count
-    p "Overloaded! Ran #{@worker_count} and got #{connections.max} active + queued"
-    p sample if options[:verbose]
-  end
-  sig, count = scaler.send(:auto_scale, sample, @worker_count)
-  @worker_count += count if sig == "TTIN"
-  @worker_count -= count if sig == "TTOU"
-end
+profiler = Alicorn::Profiler.new(options)
+profiler.profile
