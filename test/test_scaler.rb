@@ -19,7 +19,7 @@ class TestScaler < Test::Unit::TestCase
     end
   end
 
-  context "#scale!" do
+  context "#scale" do
     context "when no unicorn processes are running" do
       setup do
         @scaler.stubs(:grep_process_list).returns("foo\nbar")
@@ -27,7 +27,7 @@ class TestScaler < Test::Unit::TestCase
 
       should "raise an error" do
         exception = assert_raise(RuntimeError) do
-          @scaler.scale!
+          @scaler.scale
         end
         assert_equal "Could not find any unicorn processes", exception.message
       end
@@ -42,7 +42,7 @@ class TestScaler < Test::Unit::TestCase
 
       should "raise an error" do
         exception = assert_raise(RuntimeError) do
-          @scaler.scale!
+          @scaler.scale
         end
         assert_match /No unicorn master processes/, exception.message
       end
@@ -57,7 +57,7 @@ class TestScaler < Test::Unit::TestCase
 
       should "raise an error" do
         exception = assert_raise(RuntimeError) do
-          @scaler.scale!
+          @scaler.scale
         end
         assert_match /Too many unicorn master processes/, exception.message
       end
@@ -72,7 +72,7 @@ class TestScaler < Test::Unit::TestCase
 
       should "raise an error" do
         exception = assert_raise(RuntimeError) do
-          @scaler.scale!
+          @scaler.scale
         end
         assert_match /Old master process detected/, exception.message
       end
@@ -101,7 +101,7 @@ class TestScaler < Test::Unit::TestCase
 
       should "send the correct number of signals" do
         @scaler.expects(:send_signal).with(1050, "NOTASIGNAL").twice
-        @scaler.scale!
+        @scaler.scale
         assert true
       end      
     end
@@ -110,7 +110,6 @@ class TestScaler < Test::Unit::TestCase
   # Test the scaling algorithm separately for simplicity's sake
   context "#auto_scale" do
     setup do
-      @scaler.publicize :auto_scale
       @worker_count = 10
       @scaler.min_workers = 1
       @scaler.max_workers = 25
@@ -132,8 +131,12 @@ class TestScaler < Test::Unit::TestCase
       end
 
       context "but we've hit our minimum workers" do
+        setup do
+          @scaler.min_workers = 10
+        end
+
         should "return no signal" do
-          flunk
+          assert_equal [nil, 0], @scaler.auto_scale(@data, @worker_count)
         end
       end
     end
@@ -184,12 +187,8 @@ class TestScaler < Test::Unit::TestCase
   end
 
   context "#collect_data" do
-    setup do
-      @scaler.publicize :collect_data
-    end
-
     should "return the correct data" do
-      data = @scaler.collect_data
+      data = @scaler.send(:collect_data)
       expected_data = { :calling => [3]*30,
                         :writing => [1]*30,
                         :active  => [4]*30,

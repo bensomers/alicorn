@@ -26,7 +26,7 @@ module Alicorn
       logger.level = options[:verbose] ? Logger::DEBUG : Logger::WARN
     end
 
-    def scale!
+    def scale
       data          = collect_data
       unicorns      = find_unicorns
 
@@ -44,8 +44,6 @@ module Alicorn
       logger.error "exception occurred: #{e.class}\n\n#{e.message}"
       raise e
     end
-
-  protected
 
     def auto_scale(data, worker_count)
       return nil if data[:active].empty? or data[:queued].empty?
@@ -78,6 +76,8 @@ module Alicorn
         return nil, 0
       end
     end
+
+  protected
 
     def collect_data
       logger.debug "Sampling #{sample_count} times"
