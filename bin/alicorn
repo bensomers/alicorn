@@ -9,8 +9,14 @@ OptionParser.new do |opts|
 It relies on unicorn's built-in Raindrops middleware (so make sure you have
 enabled it). It computes rough load scores based on separately averaged
 data sets. \n\nUsage: alicorn [options]"
-  opts.on('-h', '--help', 'Display this screen' ) do
+
+  opts.on('-h', '--help', 'Display this screen') do
     puts opts
+    exit
+  end
+
+  opts.on('--version', "version number") do
+    puts Alicorn::VERSION
     exit
   end
 

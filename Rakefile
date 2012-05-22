@@ -1,4 +1,5 @@
 # encoding: utf-8
+$:.push File.join(File.dirname(__FILE__),'lib')
 
 require 'rubygems'
 require 'bundler'
@@ -11,10 +12,12 @@ rescue Bundler::BundlerError => e
 end
 require 'rake'
 
+require 'alicorn'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "alicorn"
+  gem.version = Alicorn::VERSION
   gem.homepage = "http://github.com/bensomers/alicorn"
   gem.license = "MIT"
   gem.summary = %Q{Standalone auto-scaler for unicorn}
