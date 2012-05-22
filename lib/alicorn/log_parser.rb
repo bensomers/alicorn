@@ -27,6 +27,7 @@ module Alicorn
           samples << @sample_hash # store the old sample
         end
       end
+      samples
     end
   end
 end
