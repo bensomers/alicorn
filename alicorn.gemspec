@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "alicorn"
-  s.version = "0.0.9"
+  s.version = "0.0.10"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ben Somers"]
@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
     "lib/alicorn/log_parser.rb",
     "lib/alicorn/scaler.rb",
     "test/helper.rb",
-    "test/test_alicorn.rb"
+    "test/test_scaler.rb"
   ]
   s.homepage = "http://github.com/bensomers/alicorn"
   s.licenses = ["MIT"]
