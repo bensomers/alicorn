@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "alicorn"
-  s.version = "0.0.10"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ben Somers"]
-  s.date = "2012-05-21"
+  s.date = "2012-05-22"
   s.description = "Highly configurable dumb auto-scaler for managing unicorn web servers"
   s.email = "somers.ben@gmail.com"
   s.executables = ["alicorn", "alicorn_profiler"]
@@ -24,15 +24,19 @@ Gem::Specification.new do |s|
     "LICENSE.txt",
     "README.rdoc",
     "Rakefile",
-    "VERSION",
     "alicorn.gemspec",
     "bin/alicorn",
     "bin/alicorn_profiler",
     "lib/alicorn.rb",
     "lib/alicorn/dataset.rb",
     "lib/alicorn/log_parser.rb",
+    "lib/alicorn/profiler.rb",
     "lib/alicorn/scaler.rb",
+    "lib/alicorn/version.rb",
+    "test/fixtures/sample.alicorn.log",
     "test/helper.rb",
+    "test/test_log_parser.rb",
+    "test/test_profiler.rb",
     "test/test_scaler.rb"
   ]
   s.homepage = "http://github.com/bensomers/alicorn"
@@ -51,6 +55,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<bundler>, ["~> 1.1.3"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.8.3"])
       s.add_development_dependency(%q<mocha>, ["~> 0.11.4"])
+      s.add_development_dependency(%q<simplecov>, ["~> 0.6.4"])
     else
       s.add_dependency(%q<curb>, ["~> 0.8.0"])
       s.add_dependency(%q<shoulda>, ["~> 3.0.1"])
@@ -58,6 +63,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<bundler>, ["~> 1.1.3"])
       s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
       s.add_dependency(%q<mocha>, ["~> 0.11.4"])
+      s.add_dependency(%q<simplecov>, ["~> 0.6.4"])
     end
   else
     s.add_dependency(%q<curb>, ["~> 0.8.0"])
@@ -66,6 +72,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<bundler>, ["~> 1.1.3"])
     s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
     s.add_dependency(%q<mocha>, ["~> 0.11.4"])
+    s.add_dependency(%q<simplecov>, ["~> 0.6.4"])
   end
 end
 
