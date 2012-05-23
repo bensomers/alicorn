@@ -19,7 +19,7 @@ module Alicorn
       @sample_count       = options[:sample_count]        || 30
       @app_name           = options[:app_name]            || "unicorn"
       @dry_run            = options[:dry_run]
-      @signal_delay       = 1
+      @signal_delay       = 0.5
       log_path            = options[:log_path]            || "/dev/null"
 
       self.logger = Logger.new(log_path)
@@ -59,7 +59,7 @@ module Alicorn
       target = target.ceil
 
       logger.debug "target calculated at: #{target}, worker count at #{worker_count}"
-      if target >= max_workers
+      if worker_count == max_workers and target == max_workers
         logger.warn "at maximum capacity! cannot scale up"
         return nil, 0
       elsif connections.avg > worker_count and data[:queued].avg > 1

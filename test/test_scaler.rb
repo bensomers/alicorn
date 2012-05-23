@@ -173,6 +173,17 @@ class TestScaler < Test::Unit::TestCase
       end
     end
 
+    context "when we really, really need to panic" do
+      setup do
+        @data[:queued] << 20
+        @data[:active] << 20
+      end
+
+      should "return TTIN to jump straight to max_workers" do
+        assert_equal ["TTIN", 15], @scaler.auto_scale(@data, @worker_count)
+      end
+    end
+
     context "when we don't need to scale at all" do
       setup do
         @data[:active] << 6
