@@ -1,8 +1,30 @@
-= alicorn
+= Alicorn: Auto-scaler for Unicorn webserver
 
-An experimental auto-scaler for Eric Wong's {unicorn}[http://unicorn.bogomips.org] webserver.
+An experimental auto-scaler for Eric Wong's {Unicorn}[http://unicorn.bogomips.org] 
+webserver. Designed for Unicorn webservers running with the {Raindrops}[raindrops.bogomips.org]
+middleware enabled. It depends on the "active" and "queued" fields reported by
+Raindrops, and so only works on Linux.
 
-== Contributing to alicorn
+== Usage
+
+Alicorn ships with two executables, alicorn and alicorn_profiler.
+
+alicorn: this is the main command-line utility: run alicorn --help to see the 
+list of options and learn how to configure it. 
+
+alicorn_profiler: this is a tool to help determine useful parameters for alicorn.
+it's recommended that you run alicorn in dry-run and verbose mode for awhile, 
+collect the resulting logs, and feed those through alicorn_profiler to get a 
+handle on what settings you'll need. Same story, run alicorn_profiler --help to
+figure out what the options are and how you can tweak them.
+
+== Versioning
+
+Alicorn attempts to follow the {Semantic Versioning Specification}[semver.org].
+Every release in the 0.x series should be considered a DEVELOPMENT version. 
+The public API should not be considered stable.
+
+== Contributing
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
@@ -12,8 +34,14 @@ An experimental auto-scaler for Eric Wong's {unicorn}[http://unicorn.bogomips.or
 * Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
 * Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
 
+== Credits
+
+Alicorn is maintained by {Ben Somers}[http://github.com/bensomers] and is 
+funded by {Rafter}[http://www.rafter.com]. Huge thanks to Eric 
+Wong and the rest of the {Unicorn}[http://unicorn.bogomips.org] and 
+{Raindrops}[http://raindrops.bogomips.org] contributors.
+
 == Copyright
 
 Copyright (c) 2012 Ben Somers. See LICENSE.txt for
 further details.
-
