@@ -7,15 +7,15 @@ Raindrops, and so only works on Linux.
 
 == Usage
 
-Alicorn ships with two executables, alicorn and alicorn_profiler.
+Alicorn ships with two executables, alicorn and alicorn-profiler.
 
 alicorn: this is the main command-line utility: run alicorn --help to see the 
 list of options and learn how to configure it. 
 
-alicorn_profiler: this is a tool to help determine useful parameters for alicorn.
+alicorn-profiler: this is a tool to help determine useful parameters for alicorn.
 it's recommended that you run alicorn in dry-run and verbose mode for awhile, 
-collect the resulting logs, and feed those through alicorn_profiler to get a 
-handle on what settings you'll need. Same story, run alicorn_profiler --help to
+collect the resulting logs, and feed those through alicorn-profiler to get a 
+handle on what settings you'll need. Same story, run alicorn-profiler --help to
 figure out what the options are and how you can tweak them.
 
 == Versioning
