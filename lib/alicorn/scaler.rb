@@ -1,6 +1,7 @@
 require 'curl'
 require 'logger'
 require 'alicorn/dataset'
+require 'alicorn/errors'
 
 module Alicorn
   class Scaler
@@ -40,9 +41,9 @@ module Alicorn
           sleep(signal_delay) # Make sure unicorn doesn't discard repeated signals
         end
       end
-    rescue Exception => e
+    rescue StandardError => e
       logger.error "exception occurred: #{e.class}\n\n#{e.message}"
-      raise e
+      raise e unless e.is_a?(AmbiguousMasterError) # AmbiguousMasters are fine, usually just indicate a restart
     end
 
     def auto_scale(data, worker_count)
@@ -106,11 +107,11 @@ module Alicorn
     def find_master_pid(unicorns)
       master_lines = unicorns.select { |line| line.match /master/ }
       if master_lines.size == 0
-        raise "No unicorn master processes detected. You may still be starting up."
+        raise NoMasterError.new("No unicorn master processes detected. You may still be starting up.")
       elsif master_lines.size > 1
-        raise "Too many unicorn master processes detected. You may be restarting, or have an app name collision: #{master_lines}"
+        raise AmbiguousMasterError.new("Too many unicorn master processes detected. You may be restarting, or have an app name collision: #{master_lines}")
       elsif master_lines.first.match /\(old\)/
-        raise "Old master process detected. You may be restarting: #{master_lines.first}"
+        raise AmbiguousMasterError.new("Old master process detected. You may be restarting: #{master_lines.first}")
       else
         master_lines.first.split.first.to_i
       end
@@ -123,7 +124,7 @@ module Alicorn
     def find_unicorns
       ptable = grep_process_list.split("\n")
       unicorns = ptable.select { |line| line.match(/unicorn/) && line.match(/#{Regexp.escape(app_name)}/) }
-      raise "Could not find any unicorn processes" if unicorns.empty?
+      raise NoUnicornsError.new("Could not find any unicorn processes") if unicorns.empty?
 
       unicorns.map(&:strip)
     end

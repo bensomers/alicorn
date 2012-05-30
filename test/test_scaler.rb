@@ -26,7 +26,7 @@ class TestScaler < Test::Unit::TestCase
       end
 
       should "raise an error" do
-        exception = assert_raise(RuntimeError) do
+        exception = assert_raise(Alicorn::NoUnicornsError) do
           @scaler.scale
         end
         assert_equal "Could not find any unicorn processes", exception.message
@@ -41,7 +41,7 @@ class TestScaler < Test::Unit::TestCase
       end
 
       should "raise an error" do
-        exception = assert_raise(RuntimeError) do
+        exception = assert_raise(Alicorn::NoMasterError) do
           @scaler.scale
         end
         assert_match /No unicorn master processes/, exception.message
@@ -55,11 +55,9 @@ class TestScaler < Test::Unit::TestCase
         @scaler.stubs(:grep_process_list).returns(plist)
       end
 
-      should "raise an error" do
-        exception = assert_raise(RuntimeError) do
-          @scaler.scale
-        end
-        assert_match /Too many unicorn master processes/, exception.message
+      should "die quietly" do
+        @scaler.expects(:auto_scale).never
+        @scaler.scale
       end
     end
 
@@ -70,11 +68,9 @@ class TestScaler < Test::Unit::TestCase
         @scaler.stubs(:grep_process_list).returns(plist)
       end
 
-      should "raise an error" do
-        exception = assert_raise(RuntimeError) do
-          @scaler.scale
-        end
-        assert_match /Old master process detected/, exception.message
+      should "die quietly" do
+        @scaler.expects(:auto_scale).never
+        @scaler.scale
       end
     end
 
