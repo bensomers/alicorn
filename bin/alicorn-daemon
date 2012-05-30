@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+$:.push File.join(File.dirname(__FILE__),'..','lib')
+require 'optparse'
+require 'daemons'
+require 'alicorn'

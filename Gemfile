@@ -1,6 +1,7 @@
 source "http://rubygems.org"
 
 gem "curb", "~> 0.8.0"
+gem "daemons", "~> 1.1.8"
 
 group :development do
   gem "shoulda", "~> 3.0.1"
