@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 $:.push File.join(File.dirname(__FILE__),'..','lib')
+require 'yaml'
 require 'optparse'
 require 'alicorn'
 
@@ -56,6 +57,10 @@ data sets. \n\nUsage: alicorn [options]"
     options[:log_path] = v
   end
 
+  opts.on("-c", "--config PATH", String, "path for stored options - write a yaml file containing all options") do |v|
+    options[:config_path] = v
+  end
+
   opts.on("-v", "--[no-]verbose", "turn on to write profiling info") do
     options[:verbose] = true
   end
@@ -65,6 +70,14 @@ data sets. \n\nUsage: alicorn [options]"
   end
 
 end.parse!
+
+if options[:config_path]
+  options = YAML.load_file(File.open(options[:config_path]))
+  # I prefer symbol keys, but nobody ever writes yamls with symbol keys, so convert them
+  options = options.inject({}) { |memo, pair| memo.store(pair.first.to_sym, pair.last); memo }
+end
+
 raise OptionParser::MissingArgument.new("--max-workers is a mandatory argument") unless options[:max_workers]
+
 
 Alicorn::Scaler.new(options).scale

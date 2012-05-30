@@ -1,0 +1,11 @@
+:min_workers: 2
+:max_workers: 25
+:buffer: 2
+:target_ratio: 1.3
+:url: localhost/_raindrops
+:sample_count: 30
+:delay: 0.5
+:app_name: unicorn
+:log_path: test.log
+:verbose: false
+:dry_run: true
