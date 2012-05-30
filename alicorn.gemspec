@@ -5,14 +5,14 @@
 
 Gem::Specification.new do |s|
   s.name = "alicorn"
-  s.version = "0.2.2"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ben Somers"]
-  s.date = "2012-05-22"
+  s.date = "2012-05-29"
   s.description = "Highly configurable dumb auto-scaler for managing unicorn web servers"
   s.email = "somers.ben@gmail.com"
-  s.executables = ["alicorn", "alicorn_profiler"]
+  s.executables = ["alicorn", "alicorn-profiler"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.rdoc"
@@ -26,9 +26,11 @@ Gem::Specification.new do |s|
     "Rakefile",
     "alicorn.gemspec",
     "bin/alicorn",
-    "bin/alicorn_profiler",
+    "bin/alicorn-profiler",
+    "example/config.yml",
     "lib/alicorn.rb",
     "lib/alicorn/dataset.rb",
+    "lib/alicorn/errors.rb",
     "lib/alicorn/log_parser.rb",
     "lib/alicorn/profiler.rb",
     "lib/alicorn/scaler.rb",
