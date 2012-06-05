@@ -81,7 +81,7 @@ module Alicorn
   protected
 
     def collect_data
-      logger.debug "Sampling #{sample_count} times"
+      logger.debug "Sampling #{sample_count} times at #{delay} second intervals"
       calling, writing, active, queued = DataSet.new, DataSet.new, DataSet.new, DataSet.new
       sample_count.times do
         raindrops = get_raindrops(raindrops_url)
