@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "alicorn"
-  s.version = "0.3.0"
+  s.version = "0.3.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ben Somers"]
-  s.date = "2012-05-29"
+  s.date = "2012-06-08"
   s.description = "Highly configurable dumb auto-scaler for managing unicorn web servers"
   s.email = "somers.ben@gmail.com"
   s.executables = ["alicorn", "alicorn-profiler"]
@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".document",
+    "CHANGELOG.txt",
     "Gemfile",
     "Gemfile.lock",
     "LICENSE.txt",
