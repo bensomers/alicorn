@@ -40,11 +40,9 @@ class TestScaler < Test::Unit::TestCase
         @scaler.stubs(:grep_process_list).returns(plist)
       end
 
-      should "raise an error" do
-        exception = assert_raise(Alicorn::NoMasterError) do
-          @scaler.scale
-        end
-        assert_match /No unicorn master processes/, exception.message
+      should "die quietly" do
+        @scaler.expects(:auto_scale).never
+        @scaler.scale
       end
     end
 

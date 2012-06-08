@@ -43,7 +43,7 @@ module Alicorn
       end
     rescue StandardError => e
       logger.error "exception occurred: #{e.class}\n\n#{e.message}"
-      raise e unless e.is_a?(AmbiguousMasterError) # AmbiguousMasters are fine, usually just indicate a restart
+      raise e unless e.is_a?(AmbiguousMasterError) or e.is_a?(NoMasterError) # Master-related errors are fine, usually just indicate a start or restart
     end
 
     def auto_scale(data, worker_count)
