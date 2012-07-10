@@ -1,6 +1,6 @@
 = Alicorn: Auto-scaler for Unicorn webserver
 
-An experimental auto-scaler for Eric Wong's {Unicorn}[http://unicorn.bogomips.org] 
+An experimental auto-scaler for the {Unicorn}[http://unicorn.bogomips.org] 
 webserver. Designed for Unicorn webservers running with the {Raindrops}[raindrops.bogomips.org]
 middleware enabled. It depends on the "active" and "queued" fields reported by
 Raindrops, and so only works on Linux.
