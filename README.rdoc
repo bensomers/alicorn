@@ -1,5 +1,5 @@
 = Alicorn: Auto-scaler for Unicorn webserver 
-[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/bensomers/alicorn)
+{<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/bensomers/alicorn]
 
 An experimental auto-scaler for the {Unicorn}[http://unicorn.bogomips.org] 
 webserver. Designed for Unicorn webservers running with the {Raindrops}[raindrops.bogomips.org]
