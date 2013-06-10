@@ -1,4 +1,4 @@
-require 'curl'
+require 'raindrops'
 require 'logger'
 require 'alicorn/dataset'
 require 'alicorn/errors'
@@ -6,7 +6,8 @@ require 'alicorn/errors'
 module Alicorn
   class Scaler
     attr_accessor :min_workers, :max_workers, :target_ratio, :buffer,
-      :raindrops_url, :delay, :sample_count, :app_name, :dry_run, :logger
+      :listener_type, :listener_address, :delay, :sample_count, :app_name,
+      :dry_run, :logger
 
     attr_reader :signal_delay
 
@@ -15,7 +16,8 @@ module Alicorn
       @max_workers        = options[:max_workers]
       @target_ratio       = options[:target_ratio]        || 1.3
       @buffer             = options[:buffer]              || 2
-      @raindrops_url      = options[:url]                 || "http://127.0.0.1/_raindrops"
+      @listener_type      = options[:listener_type]       || "tcp"
+      @listener_address   = options[:listener_address]    || "0.0.0.0:80"
       @delay              = options[:delay]               || 1
       @sample_count       = options[:sample_count]        || 30
       @app_name           = options[:app_name]            || "unicorn"
@@ -82,23 +84,19 @@ module Alicorn
 
     def collect_data
       logger.debug "Sampling #{sample_count} times at #{delay} second intervals"
-      calling, writing, active, queued = DataSet.new, DataSet.new, DataSet.new, DataSet.new
+      active, queued = DataSet.new, DataSet.new
       sample_count.times do
-        raindrops = get_raindrops(raindrops_url)
-        calling << $1.to_i if raindrops.detect { |line| line.match(/calling: ([0-9]+)/) }
-        writing << $1.to_i if raindrops.detect { |line| line.match(/writing: ([0-9]+)/) }
-        active  << $1.to_i if raindrops.detect { |line| line.match(/active: ([0-9]+)/) }
-        queued  << $1.to_i if raindrops.detect { |line| line.match(/queued: ([0-9]+)/) }
+        stats = Raindrops::Linux.send(:"#{listener_type}_listener_stats", listener_address)[listener_address]
+        active << stats.active
+        queued << stats.queued
         sleep(delay)
       end
 
       logger.debug "Collected:"
-      logger.debug "calling:#{calling}"
-      logger.debug "writing:#{writing}"
       logger.debug "active:#{active}"
       logger.debug "queued:#{queued}"
 
-      {:calling => calling, :writing => writing, :active => active, :queued => queued}
+      {:active => active, :queued => queued}
     end
 
   private
@@ -135,10 +133,6 @@ module Alicorn
 
     def send_signal(master_pid, sig)
       Process.kill(sig, master_pid)
-    end
-
-    def get_raindrops(url)
-      Curl::Easy.http_get(url).body_str.split("\n")
     end
   end
 end

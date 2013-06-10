@@ -5,9 +5,11 @@ class TestScaler < Test::Unit::TestCase
   def setup
     @scaler = Alicorn::Scaler.new(:delay => 0)
 
-    # stub out external call
-    raindrops = "calling: 3\nwriting: 1\n/tmp/cart.socket active: 4\n/tmp/cart.socket queued: 0\n"
-    Curl::Easy.stubs(:http_get).returns(stub(:body_str => raindrops))
+    # stub out stats gathering
+    mock_struct = stub_everything(:active => 4, :queued => 0)
+    Raindrops::Linux.stubs(:tcp_listener_stats).returns({"0.0.0.0:80" =>  mock_struct})
+    # raindrops = "calling: 3\nwriting: 1\n/tmp/cart.socket active: 4\n/tmp/cart.socket queued: 0\n"
+    # Curl::Easy.stubs(:http_get).returns(stub(:body_str => raindrops))
 
     # enable us to test private methods, for the complicated ones
     class << @scaler
@@ -194,9 +196,7 @@ class TestScaler < Test::Unit::TestCase
   context "#collect_data" do
     should "return the correct data" do
       data = @scaler.send(:collect_data)
-      expected_data = { :calling => [3]*30,
-                        :writing => [1]*30,
-                        :active  => [4]*30,
+      expected_data = { :active  => [4]*30,
                         :queued  => [0]*30 }
       assert_equal expected_data, data
     end

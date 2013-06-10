@@ -7,9 +7,8 @@ require 'alicorn'
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Alicorn is a tool for auto-scaling unicorn worker counts.
-It relies on unicorn's built-in Raindrops middleware (so make sure you have
-enabled it). It computes rough load scores based on separately averaged
-data sets. \n\nUsage: alicorn [options]"
+It computes rough load scores based on separately averaged data sets. 
+\n\nUsage: alicorn [options]"
 
   opts.on('-h', '--help', 'Display this screen') do
     puts opts
@@ -37,8 +36,12 @@ data sets. \n\nUsage: alicorn [options]"
     options[:target_ratio] = v
   end
 
-  opts.on("--url [URL]", String, "raindrops URL to check, defaults to 127.0.0.1/_raindrops") do |v|
-    options[:url] = v
+  opts.on("--listener-type", String, "the type of listener to use, tcp or unix -- defaults to tcp") do |v|
+    options[:listener_type] = v
+  end
+
+  opts.on("--listener-address", String, "the listener address to use - defaults to 0.0.0.0:80") do |v|
+    options[:listener_address] = v
   end
 
   opts.on("--sample-count [N]", Integer, "number of data points to check before scaling") do |v|
