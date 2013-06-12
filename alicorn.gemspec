@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "alicorn"
-  s.version = "0.3.1"
+  s.version = "0.4.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ben Somers"]
-  s.date = "2012-06-08"
+  s.date = "2013-06-12"
   s.description = "Highly configurable dumb auto-scaler for managing unicorn web servers"
   s.email = "somers.ben@gmail.com"
   s.executables = ["alicorn", "alicorn-profiler"]
@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".document",
+    ".ruby-gemset",
     "CHANGELOG.txt",
     "Gemfile",
     "Gemfile.lock",
@@ -45,34 +46,34 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/bensomers/alicorn"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.17"
+  s.rubygems_version = "1.8.25"
   s.summary = "Standalone auto-scaler for unicorn"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<curb>, ["~> 0.8.0"])
+      s.add_runtime_dependency(%q<raindrops>, [">= 0.5.0"])
       s.add_development_dependency(%q<shoulda>, ["~> 3.0.1"])
       s.add_development_dependency(%q<rdoc>, ["~> 3.12"])
-      s.add_development_dependency(%q<bundler>, ["~> 1.1.3"])
+      s.add_development_dependency(%q<bundler>, ["~> 1.3.5"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.8.3"])
       s.add_development_dependency(%q<mocha>, ["~> 0.11.4"])
       s.add_development_dependency(%q<simplecov>, ["~> 0.6.4"])
     else
-      s.add_dependency(%q<curb>, ["~> 0.8.0"])
+      s.add_dependency(%q<raindrops>, [">= 0.5.0"])
       s.add_dependency(%q<shoulda>, ["~> 3.0.1"])
       s.add_dependency(%q<rdoc>, ["~> 3.12"])
-      s.add_dependency(%q<bundler>, ["~> 1.1.3"])
+      s.add_dependency(%q<bundler>, ["~> 1.3.5"])
       s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
       s.add_dependency(%q<mocha>, ["~> 0.11.4"])
       s.add_dependency(%q<simplecov>, ["~> 0.6.4"])
     end
   else
-    s.add_dependency(%q<curb>, ["~> 0.8.0"])
+    s.add_dependency(%q<raindrops>, [">= 0.5.0"])
     s.add_dependency(%q<shoulda>, ["~> 3.0.1"])
     s.add_dependency(%q<rdoc>, ["~> 3.12"])
-    s.add_dependency(%q<bundler>, ["~> 1.1.3"])
+    s.add_dependency(%q<bundler>, ["~> 1.3.5"])
     s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
     s.add_dependency(%q<mocha>, ["~> 0.11.4"])
     s.add_dependency(%q<simplecov>, ["~> 0.6.4"])
