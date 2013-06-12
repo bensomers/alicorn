@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem "raindrops", "~> 0.11.0"
+gem "raindrops", ">= 0.5.0"
 
 group :development do
   gem "shoulda", "~> 3.0.1"
