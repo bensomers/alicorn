@@ -1,3 +1,13 @@
+=== 0.4.0 / 2013-06-12
+
+* Switched data collection from curb-and-Raindrops-middleware to Raindrops::Linux
+* Replaced curb with raindrops in dependencies list
+* Refactored LogParser a bit
+
+=== 0.3.1
+
+* Forgot to make an entry in the changelog file
+
 === 0.3.0 /  2012-05-29
 
 * Initial changelog documentation
