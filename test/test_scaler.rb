@@ -8,8 +8,6 @@ class TestScaler < Test::Unit::TestCase
     # stub out stats gathering
     mock_struct = stub_everything(:active => 4, :queued => 0)
     Raindrops::Linux.stubs(:tcp_listener_stats).returns({"0.0.0.0:80" =>  mock_struct})
-    # raindrops = "calling: 3\nwriting: 1\n/tmp/cart.socket active: 4\n/tmp/cart.socket queued: 0\n"
-    # Curl::Easy.stubs(:http_get).returns(stub(:body_str => raindrops))
 
     # enable us to test private methods, for the complicated ones
     class << @scaler
