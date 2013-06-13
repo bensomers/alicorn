@@ -7,6 +7,6 @@ group :development do
   gem "rdoc", "~> 3.12"
   gem "bundler", "~> 1.3.5"
   gem "jeweler", "~> 1.8.3"
-  gem "mocha", "~> 0.11.4"
-  gem "simplecov", "~> 0.6.4", :require => false
+  gem "mocha"
+  gem "simplecov", :require => false
 end

@@ -9,7 +9,7 @@ GEM
       rdoc
     json (1.8.0)
     metaclass (0.0.1)
-    mocha (0.11.4)
+    mocha (0.14.0)
       metaclass (~> 0.0.1)
     multi_json (1.7.6)
     raindrops (0.11.0)
@@ -21,10 +21,10 @@ GEM
       shoulda-matchers (~> 1.0.0)
     shoulda-context (1.0.2)
     shoulda-matchers (1.0.0)
-    simplecov (0.6.4)
+    simplecov (0.7.1)
       multi_json (~> 1.0)
-      simplecov-html (~> 0.5.3)
-    simplecov-html (0.5.3)
+      simplecov-html (~> 0.7.1)
+    simplecov-html (0.7.1)
 
 PLATFORMS
   ruby
@@ -32,8 +32,8 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.3.5)
   jeweler (~> 1.8.3)
-  mocha (~> 0.11.4)
+  mocha
   raindrops (>= 0.5.0)
   rdoc (~> 3.12)
   shoulda (~> 3.0.1)
-  simplecov (~> 0.6.4)
+  simplecov
