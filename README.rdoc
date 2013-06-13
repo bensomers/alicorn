@@ -1,6 +1,7 @@
 = Alicorn: Auto-scaler for Unicorn webserver 
 {<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/bensomers/alicorn]
 {<img src="https://gemnasium.com/bensomers/alicorn.png" alt="Dependency Status" />}[https://gemnasium.com/bensomers/alicorn]
+{<img src="https://travis-ci.org/bensomers/alicorn.png?branch=master" alt="Build Status" />}[https://travis-ci.org/bensomers/alicorn]
 
 An experimental auto-scaler for the {Unicorn}[http://unicorn.bogomips.org] 
 webserver. Designed for Unicorn webservers running with the {Raindrops}[raindrops.bogomips.org]
