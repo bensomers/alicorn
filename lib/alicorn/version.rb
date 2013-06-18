@@ -1,3 +1,3 @@
 module Alicorn
-  VERSION = "0.4.2.pre2"
+  VERSION = "0.4.2"
 end
