@@ -36,11 +36,11 @@ It computes rough load scores based on separately averaged data sets.
     options[:target_ratio] = v
   end
 
-  opts.on("--listener-type", String, "the type of listener to use, tcp or unix -- defaults to tcp") do |v|
-    options[:listener_type] = v
+  opts.on("--listener-type [TYPE]", [:tcp, :unix], "the type of listener to use, tcp or unix -- defaults to tcp") do |v|
+    options[:listener_type] = v.to_sym
   end
 
-  opts.on("--listener-address", String, "the listener address to use - defaults to 0.0.0.0:80") do |v|
+  opts.on("--listener-address [ADDRESS]", String, "the listener address to use - defaults to 0.0.0.0:80") do |v|
     options[:listener_address] = v
   end
 
@@ -81,6 +81,5 @@ if options[:config_path]
 end
 
 raise OptionParser::MissingArgument.new("--max-workers is a mandatory argument") unless options[:max_workers]
-
 
 Alicorn::Scaler.new(options).scale
