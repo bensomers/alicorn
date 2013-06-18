@@ -83,10 +83,10 @@ module Alicorn
   protected
 
     def collect_data
-      logger.debug "Sampling #{sample_count} times at #{delay} second intervals"
+      logger.debug "Sampling #{listener_type} listener at #{listener_address} #{sample_count} times at #{delay} second intervals"
       active, queued = DataSet.new, DataSet.new
       sample_count.times do
-        stats = Raindrops::Linux.send(:"#{listener_type}_listener_stats", listener_address)[listener_address]
+        stats = Raindrops::Linux.send(:"#{listener_type}_listener_stats")[listener_address]
         active << stats.active
         queued << stats.queued
         sleep(delay)

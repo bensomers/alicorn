@@ -7,7 +7,7 @@ class TestScaler < Test::Unit::TestCase
 
     # stub out stats gathering
     mock_struct = stub_everything(:active => 4, :queued => 0)
-    Raindrops::Linux.stubs(:tcp_listener_stats).returns({"0.0.0.0:80" =>  mock_struct})
+    Raindrops::Linux.stubs(:tcp_listener_stats).with().returns({"0.0.0.0:80" =>  mock_struct})
 
     # enable us to test private methods, for the complicated ones
     class << @scaler
@@ -192,11 +192,29 @@ class TestScaler < Test::Unit::TestCase
   end
 
   context "#collect_data" do
-    should "return the correct data" do
-      data = @scaler.send(:collect_data)
-      expected_data = { :active  => [4]*30,
-                        :queued  => [0]*30 }
-      assert_equal expected_data, data
+    context "when using a tcp listener" do
+      should "return the correct data" do
+        data = @scaler.send(:collect_data)
+        expected_data = { :active  => [4]*30,
+                          :queued  => [0]*30 }
+        assert_equal expected_data, data
+      end
+    end
+
+    
+    context "when using a unix listener" do
+
+      should "sample unix stats as well as tcp" do
+        @scaler.listener_type = :unix
+        @scaler.listener_address = "/tmp/app.socket"
+        mock_struct = stub_everything(:active => 6, :queued => 0)
+        Raindrops::Linux.expects(:unix_listener_stats).times(30).with().returns({"/tmp/app.socket" =>  mock_struct})
+
+        data = @scaler.send(:collect_data)
+        expected_data = { :active  => [6]*30,
+                          :queued  => [0]*30 }
+        assert_equal expected_data, data
+      end
     end
   end
 
