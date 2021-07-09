@@ -4,9 +4,9 @@ gem "raindrops", ">= 0.5.0"
 
 group :development do
   gem "shoulda"
-  gem "rdoc"
+  gem "rdoc", ">= 6.3.1"
   gem "bundler"
-  gem "jeweler"
+  gem "jeweler", ">= 1.8.4"
   gem "mocha"
   gem "simplecov", :require => false
 end
